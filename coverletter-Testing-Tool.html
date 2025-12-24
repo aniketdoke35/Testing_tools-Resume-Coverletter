@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Letter Template Viewer</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            padding: 0 10px;
+        }
+
+        .tab {
+            padding: 10px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab:hover:not(.active) {
+            color: white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 400px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 6px;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        /* Template List */
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 15px;
+        }
+
+        .menu-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.1), transparent);
+            border-left: 3px solid var(--primary);
+            color: var(--primary);
+        }
+
+        /* Data Form */
+        .form-container {
+            padding: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Actions */
+        .actions {
+            padding: 15px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Main Area */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0f172a;
+            position: relative;
+        }
+
+        .toolbar {
+            height: 50px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+            background: var(--surface);
+        }
+
+        .preview-container {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            background: #334155;
+            overflow: auto;
+        }
+
+        iframe {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            border: none;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .status {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)">
+        <div class="sidebar-header">
+            <div class="title">
+                <div class="icon"></div>
+                Cover Letter Tool
+            </div>
+            <!-- <div style="margin-top: 15px; display: flex; gap: 5px;">
+                <input type="text" id="urlInput" placeholder="Path or URL (e.g. http://...)"
+                    style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: white; padding: 6px; border-radius: 4px; flex: 1; font-size: 12px;">
+                <button onclick="addFromUrl()" class="btn"
+                    style="padding: 6px 12px; font-size: 12px; width: auto;">Add</button>
+            </div> -->
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('templates')">Templates</div>
+            <div class="tab" onclick="switchTab('data')">Data Editor</div>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Templates View -->
+            <div id="view-templates" style="display:block;">
+                <div class="menu" id="templateList">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <!-- Data View -->
+            <div id="view-data" style="display:none;">
+                <div class="form-container" id="form-container">
+                    <!-- Generated form -->
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+
+            <button class="btn secondary" onclick="takeSnapshot()">Snapshot</button>
+            <button class="btn" onclick="retryLoad()">Reset Data</button>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="toolbar">
+            <div class="status" id="status">Ready</div>
+        </div>
+        <div class="preview-container">
+            <iframe id="previewFrame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        let templates = [];
+
+        let currentData = {};
+        let activeTab = 'templates';
+
+        // --- Core Logic ---
+
+        async function loadData() {
+            try {
+                const res = await fetch('index.json');
+                if (!res.ok) throw new Error('Failed to load');
+                currentData = await res.json();
+                document.getElementById('status').innerText = 'Data loaded';
+                generateForm();
+                sendDataToFrame();
+            } catch (e) {
+                console.error(e);
+                document.getElementById('status').innerText = 'Error loading index.json. Ensure server is running.';
+            }
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+
+            document.getElementById('view-templates').style.display = tab === 'templates' ? 'block' : 'none';
+            document.getElementById('view-data').style.display = tab === 'data' ? 'block' : 'none';
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const url = URL.createObjectURL(file);
+            templates.push({ name: file.name, url: url });
+            renderMenu();
+            selectTemplate(templates.length - 1);
+        }
+
+        function addFromUrl() {
+            const input = document.getElementById('urlInput');
+            const url = input.value.trim();
+            if (!url) return;
+
+            // Extract name from URL
+            const name = url.split('/').pop() || 'Remote Template';
+            templates.push({ name: name, url: url });
+            renderMenu();
+            selectTemplate(templates.length - 1);
+            input.value = '';
+        }
+
+        function renderMenu() {
+            const list = document.getElementById('templateList');
+            list.innerHTML = '';
+
+            // Browse Button
+            const browseBtn = document.createElement('div');
+            browseBtn.className = 'menu-item';
+            browseBtn.style.textAlign = 'center';
+            browseBtn.style.border = '1px dashed var(--text-muted)';
+            browseBtn.innerText = '+ Browse Template';
+            browseBtn.onclick = () => document.getElementById('fileInput').click();
+            list.appendChild(browseBtn);
+
+            templates.forEach((t, i) => {
+                const item = document.createElement('div');
+                item.className = 'menu-item';
+                item.innerText = t.name;
+                item.onclick = () => selectTemplate(i);
+                list.appendChild(item);
+            });
+        }
+
+        function selectTemplate(index) {
+            document.querySelectorAll('.menu-item').forEach((el, i) => {
+                // Adjust index for browse button which is first child
+                if (i === 0) return;
+                el.classList.toggle('active', i - 1 === index);
+            });
+            const frame = document.getElementById('previewFrame');
+            frame.onload = () => setTimeout(sendDataToFrame, 100);
+            frame.src = templates[index].url;
+        }
+
+        function sendDataToFrame() {
+            if (!currentData || Object.keys(currentData).length === 0) return;
+            const frame = document.getElementById('previewFrame');
+            if (frame && frame.contentWindow) {
+                frame.contentWindow.postMessage({
+                    type: 'RENDER_DATA',
+                    payload: currentData
+                }, '*');
+            }
+        }
+
+        // --- Dynamic Form Generation ---
+
+        function generateForm() {
+            const container = document.getElementById('form-container');
+            container.innerHTML = '';
+
+            // Define sections based on JSON structure
+            const schemaOrder = [
+                { key: 'nameAndContact', label: 'Sender Info' },
+                { key: 'recipient', label: 'Recipient Info' },
+                { key: 'date', label: 'Date' },
+                { key: 'subject', label: 'Subject' },
+                { key: 'greeting', label: 'Greeting' },
+                { key: 'opening', label: 'Opening Paragraph' },
+                { key: 'letterBody', label: 'Body Content' },
+                { key: 'closing', label: 'Closing' },
+                { key: 'signature', label: 'Signature' },
+                { key: 'gapExplanation', label: 'Gap Explanation' },
+                { key: 'relocation', label: 'Relocation' },
+                { key: 'salaryRequirements', label: 'Salary' },
+                { key: 'availability', label: 'Availability' },
+                { key: 'confidentiality', label: 'Confidentiality' }
+            ];
+
+            schemaOrder.forEach(section => {
+                if (currentData[section.key]) {
+                    const title = document.createElement('div');
+                    title.className = 'form-section-title';
+                    title.innerText = section.label;
+                    container.appendChild(title);
+
+                    createInputsRecursive(currentData[section.key], [section.key], container);
+                }
+            });
+        }
+
+        function createInputsRecursive(obj, bPath, container) {
+            for (const key in obj) {
+                const value = obj[key];
+                const path = [...bPath, key];
+
+                if (typeof value === 'object' && value !== null) {
+                    if (Array.isArray(value)) {
+                        // Arrays: Special handling (e.g., paragraphs)
+                        const label = document.createElement('label');
+                        label.style.cssText = 'display:block;margin-top:10px;font-size:12px;color:#aaa;';
+                        label.innerText = key.toUpperCase();
+                        container.appendChild(label);
+
+                        value.forEach((item, idx) => {
+                            if (typeof item === 'string') {
+                                createInput(item, [...path, idx], container, true);
+                            }
+                        });
+                    } else {
+                        // Nested Object
+                        createInputsRecursive(value, path, container);
+                    }
+                } else {
+                    // Primitive
+                    createInput(value, path, container);
+                }
+            }
+        }
+
+        function createInput(value, path, container, isTextArea = false) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'form-group';
+
+            const lastKey = path[path.length - 1];
+            const label = document.createElement('label');
+            // If it's an array index, don't label it '0', '1', just label valid keys
+            label.innerText = isNaN(lastKey) ? lastKey.replace(/([A-Z])/g, ' $1').trim() : '';
+            wrapper.appendChild(label);
+
+            let input;
+            // Heuristic: if value length > 60 or key contains 'paragraph', use textarea
+            const useTextArea = isTextArea || (typeof value === 'string' && value.length > 50) || String(lastKey).toLowerCase().includes('paragraph');
+
+            if (useTextArea) {
+                input = document.createElement('textarea');
+                input.rows = 4;
+            } else {
+                input = document.createElement('input');
+                input.type = typeof value === 'boolean' ? 'checkbox' : 'text';
+                // boolean checkbox handling needs wrapper adjustment but simplified here:
+                if (typeof value === 'boolean') {
+                    input.checked = value;
+                    input.style.width = 'auto'; // Reset width for checkbox
+                }
+            }
+
+            if (typeof value !== 'boolean') input.value = value;
+
+            input.oninput = (e) => {
+                const val = input.type === 'checkbox' ? input.checked : input.value;
+                updateData(path, val);
+            };
+
+            wrapper.appendChild(input);
+            container.appendChild(wrapper);
+        }
+
+        function updateData(path, value) {
+            let ref = currentData;
+            for (let i = 0; i < path.length - 1; i++) {
+                ref = ref[path[i]];
+            }
+            ref[path[path.length - 1]] = value;
+            sendDataToFrame();
+        }
+
+        function copyJSON() {
+            navigator.clipboard.writeText(JSON.stringify(currentData, null, 2))
+                .then(() => {
+                    const btn = document.querySelector('.btn.secondary');
+                    const oldText = btn.innerText;
+                    btn.innerText = 'Copied!';
+                    setTimeout(() => btn.innerText = oldText, 2000);
+                });
+        }
+
+        async function takeSnapshot() {
+            const frame = document.getElementById('previewFrame');
+            if (frame && frame.contentWindow) {
+                const doc = frame.contentWindow.document;
+                try {
+                    // Temporarily hide scrollbars for cleaner snapshot
+                    const originalOverflow = doc.body.style.overflow;
+                    doc.body.style.overflow = 'hidden';
+
+                    const canvas = await html2canvas(doc.body, {
+                        scale: 2, // Higher quality
+                        useCORS: true,
+                        backgroundColor: '#ffffff' // Ensure white background
+                    });
+
+                    // Restore scrollbars
+                    doc.body.style.overflow = originalOverflow;
+
+                    const link = document.createElement('a');
+                    link.download = `cover-letter-snapshot-${Date.now()}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                } catch (err) {
+                    console.error('Snapshot failed:', err);
+                    alert('Could not take snapshot. Check console for details.');
+                }
+            }
+        }
+
+        function retryLoad() {
+            loadData();
+        }
+
+        window.addEventListener('load', () => {
+            renderMenu();
+            loadData();
+        });
+    </script>
+</body>
+
+</html>

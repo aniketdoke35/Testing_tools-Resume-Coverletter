@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Template Tester</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --sidebar-bg: #1e293b;
+            --main-bg: #334155;
+            --panel-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --border-color: #334155;
+            --input-bg: #0f172a;
+            --input-border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--main-bg);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 380px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--accent-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--sidebar-bg);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tab-pane {
+            padding: 20px;
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Form Components */
+        .section {
+            background-color: transparent;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            padding: 0;
+            box-shadow: none;
+            border: none;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .section-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .section-content {
+            display: none;
+            padding-top: 5px;
+        }
+
+        .section.open .section-content {
+            display: block;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+            color: var(--text-secondary);
+            font-size: 10px;
+        }
+
+        .section.open .toggle-icon {
+            transform: rotate(180deg);
+            color: var(--accent-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #475569;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        /* Array Items */
+        .array-section {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            margin-top: 10px;
+        }
+
+        .array-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .remove-item {
+            background-color: transparent;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .remove-item:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .add-item {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px dashed var(--accent-color);
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .add-item:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--sidebar-bg);
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-snapshot {
+            flex: 1;
+            padding: 12px;
+            background-color: #334155;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .btn-snapshot:hover {
+            background-color: #475569;
+        }
+
+        .btn-reset {
+            flex: 1;
+            padding: 12px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .btn-reset:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-update {
+            display: none;
+        }
+
+        /* Template Selector Styles */
+        .template-browse-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .template-selector-container {
+            margin-bottom: 20px;
+        }
+
+        .template-selector-container h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Main Preview Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #2d3748;
+            position: relative;
+        }
+
+        .top-bar {
+            height: 48px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .preview-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            overflow: auto;
+            background-color: #3f4451;
+        }
+
+        .preview-frame {
+            width: 210mm;
+            min-height: 297mm;
+            height: 297mm;
+            background-color: white;
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--sidebar-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 50vh;
+            }
+
+            .main-content {
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon"></div>
+            <h2>Resume Tester Tool</h2>
+        </div>
+
+        <div class="sidebar-tabs">
+            <div class="tab active" onclick="switchTab('templates')">Templates</div>
+            <div class="tab" onclick="switchTab('editor')">Data Editor</div>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Templates Tab -->
+            <div id="tab-templates" class="tab-pane active">
+                <!-- Template Selector Removed -->
+
+                <div style="margin-top: 20px;">
+                    <button class="template-browse-btn" onclick="document.getElementById('file-input').click()">
+                        + Add Global Template
+                    </button>
+                    <input type="file" id="file-input" accept=".html" onchange="loadLocalFile(this)"
+                        style="display: none;">
+                </div>
+            </div>
+
+            <!-- Editor Tab -->
+            <div id="tab-editor" class="tab-pane">
+                <!-- Personal Info Section -->
+                <div class="section open">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Personal Information</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" placeholder="Enter full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" placeholder="Enter first name">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" placeholder="Enter last name">
+                        </div>
+                        <div class="form-group">
+                            <label for="professionalTitle">Professional Title</label>
+                            <input type="text" id="professionalTitle" placeholder="Enter professional title">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" placeholder="Enter phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="countryCode">Country Code</label>
+                            <input type="text" id="countryCode" placeholder="Enter country code">
+                        </div>
+                        <div class="form-group">
+                            <label for="dateOfBirth">Date of Birth</label>
+                            <input type="date" id="dateOfBirth">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nationality">Nationality</label>
+                            <input type="text" id="nationality" placeholder="Enter nationality">
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input type="text" id="country" placeholder="Enter country">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" placeholder="Enter state">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label for="streetNumber">Street Number</label>
+                            <input type="text" id="streetNumber" placeholder="Enter street number">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" placeholder="Enter address">
+                        </div>
+                        <div class="form-group">
+                            <label for="postalZipCode">Postal/Zip Code</label>
+                            <input type="text" id="postalZipCode" placeholder="Enter postal/zip code">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileImage">Profile Image URL</label>
+                            <input type="text" id="profileImage" placeholder="Enter profile image URL">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileDescription">Profile Description</label>
+                            <textarea id="profileDescription" placeholder="Enter profile description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="text" id="website" placeholder="Enter website URL">
+                        </div>
+                        <div class="form-group">
+                            <label for="linkedin">LinkedIn</label>
+                            <input type="text" id="linkedin" placeholder="Enter LinkedIn URL">
+                        </div>
+                        <div class="form-group">
+                            <label for="githubLink">GitHub</label>
+                            <input type="text" id="githubLink" placeholder="Enter GitHub URL">
+                        </div>
+                        <div class="form-group">
+                            <label for="drivingLicense">Driving License</label>
+                            <input type="text" id="drivingLicense" placeholder="Enter driving license">
+                        </div>
+                        <div class="form-group">
+                            <label for="passportNumber">Passport Number</label>
+                            <input type="text" id="passportNumber" placeholder="Enter passport number">
+                        </div>
+                        <div class="form-group">
+                            <label for="maritalStatus">Marital Status</label>
+                            <select id="maritalStatus">
+                                <option value="">Select Status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="divorced">Divorced</option>
+                                <option value="widowed">Widowed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="militaryService">Military Service</label>
+                            <input type="text" id="militaryService" placeholder="Enter military service details">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Work Experience Section -->
+                <!-- Work Experience Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Work Experience</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="workExperienceContainer"></div>
+                        <button class="add-item" onclick="addItem('workExperience')">Add Experience</button>
+                    </div>
+                </div>
+
+                <!-- Education Section -->
+                <!-- Education Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Education</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="educationContainer"></div>
+                        <button class="add-item" onclick="addItem('education')">Add Education</button>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <!-- Skills Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Skills</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="skillsContainer"></div>
+                        <button class="add-item" onclick="addItem('skills')">Add Skill</button>
+                    </div>
+                </div>
+
+                <!-- Projects Section -->
+                <!-- Projects Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Projects</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="projectsContainer"></div>
+                        <button class="add-item" onclick="addItem('projects')">Add Project</button>
+                    </div>
+                </div>
+
+                <!-- Certifications Section -->
+                <!-- Certifications Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Certifications</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="certificationsContainer"></div>
+                        <button class="add-item" onclick="addItem('certifications')">Add Certification</button>
+                    </div>
+                </div>
+
+                <!-- Languages Section -->
+                <!-- Languages Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Languages</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="languagesContainer"></div>
+                        <button class="add-item" onclick="addItem('languages')">Add Language</button>
+                    </div>
+                </div>
+
+                <!-- Accomplishments Section -->
+                <!-- Accomplishments Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Accomplishments</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="accomplishmentsContainer"></div>
+                        <button class="add-item" onclick="addItem('accomplishments')">Add Accomplishment</button>
+                    </div>
+                </div>
+
+                <!-- Interests Section -->
+                <!-- Interests Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Interests</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="interestsContainer"></div>
+                        <button class="add-item" onclick="addItem('interests')">Add Interest</button>
+                    </div>
+                </div>
+
+                <!-- Affiliations Section -->
+                <!-- Affiliations Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Affiliations</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="affiliationsContainer"></div>
+                        <button class="add-item" onclick="addItem('affiliations')">Add Affiliation</button>
+                    </div>
+                </div>
+
+                <!-- Publications Section -->
+                <!-- Publications Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Publications</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="publicationsContainer"></div>
+                        <button class="add-item" onclick="addItem('publications')">Add Publication</button>
+                    </div>
+                </div>
+
+                <!-- References Section -->
+                <!-- References Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>References</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="referencesContainer"></div>
+                        <button class="add-item" onclick="addItem('references')">Add Reference</button>
+                    </div>
+                </div>
+
+                <!-- Social Media Section -->
+                <!-- Social Media Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Social Media</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="socialMediaContainer"></div>
+                        <button class="add-item" onclick="addItem('socialMedia')">Add Social Media</button>
+                    </div>
+                </div>
+
+                <!-- Strengths Section -->
+                <!-- Strengths Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Strengths</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="strengthsContainer"></div>
+                        <button class="add-item" onclick="addItem('strengths')">Add Strength</button>
+                    </div>
+                </div>
+
+                <!-- Volunteering Section -->
+                <!-- Volunteering Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Volunteering</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="volunteeringContainer"></div>
+                        <button class="add-item" onclick="addItem('volunteering')">Add Volunteering</button>
+                    </div>
+                </div>
+
+                <!-- Internships Section -->
+                <!-- Internships Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Internships</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="internshipsContainer"></div>
+                        <button class="add-item" onclick="addItem('internships')">Add Internship</button>
+                    </div>
+                </div>
+
+                <!-- Summaries Section -->
+                <!-- Summaries Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Summaries</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="summariesContainer"></div>
+                        <button class="add-item" onclick="addItem('summaries')">Add Summary</button>
+                    </div>
+                </div>
+
+                <!-- Custom Sections Section -->
+                <!-- Custom Sections Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Custom Sections</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="customSectionsContainer"></div>
+                        <button class="add-item" onclick="addItem('customSections')">Add Custom Section</button>
+                    </div>
+                </div>
+
+                <!-- Hidden button maintained for compatibility if needed, but we use live updates now -->
+                <button class="btn-update" onclick="updateResume()" style="display:none;">Update Resume</button>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn-snapshot" onclick="takeSnapshot()">Snapshot</button>
+            <button class="btn-reset" onclick="location.reload()">Reset Data</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">Data loaded</div>
+        <div class="preview-wrapper">
+            <iframe id="previewFrame" class="preview-frame" src="template1.html"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function takeSnapshot() {
+            const frame = document.getElementById('previewFrame');
+            try {
+                // accessing contentDocument requires same-origin
+                const body = frame.contentDocument.body;
+
+                // Add a temporary background if transparent, as html2canvas might render it black/transparent
+                const originalBg = body.style.backgroundColor;
+                if (!originalBg || originalBg === 'transparent') {
+                    body.style.backgroundColor = 'white';
+                }
+
+                html2canvas(body, {
+                    scale: 2, // High resolution
+                    useCORS: true,
+                    logging: false,
+                    windowWidth: body.scrollWidth,
+                    windowHeight: body.scrollHeight
+                }).then(canvas => {
+                    // Restore background
+                    body.style.backgroundColor = originalBg;
+
+                    const link = document.createElement('a');
+                    link.download = 'resume-snapshot.png';
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }).catch(err => {
+                    console.error("Snapshot failed:", err);
+                    alert("Failed to create snapshot. Ensure you are running on a local server or have proper file permissions.");
+                });
+            } catch (e) {
+                console.error(e);
+                alert("Cannot access iframe content. This usually happens due to Cross-Origin restrictions (CORS) when opening files directly from disk. Please try running this via a local server (e.g. VS Code Live Server).");
+            }
+        }
+
+        function toggleSection(header) {
+            header.parentElement.classList.toggle('open');
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            // Show selected pane
+            document.getElementById('tab-' + tabName).classList.add('active');
+
+            // Deactivate all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Activate selected tab matches
+            document.querySelectorAll(`.tab[onclick*="${tabName}"]`).forEach(tab => {
+                tab.classList.add('active');
+            });
+        }
+
+        // Initialize with sample data
+        // Initialize with empty data
+        const sampleData = {
+            "personalInfo": {
+                "fullName": "",
+                "firstName": "",
+                "lastName": "",
+                "professionalTitle": "",
+                "email": "",
+                "phone": "",
+                "countryCode": "",
+                "dateOfBirth": "",
+                "gender": "",
+                "nationality": "",
+                "country": "",
+                "state": "",
+                "city": "",
+                "streetNumber": "",
+                "address": "",
+                "postalZipCode": "",
+                "profileImage": "",
+                "profileDescription": "",
+                "website": "",
+                "linkedin": "",
+                "githubLink": "",
+                "drivingLicense": "",
+                "passportNumber": "",
+                "maritalStatus": "",
+                "militaryService": ""
+            },
+            "sections": {
+                "workExperience": [],
+                "education": [],
+                "skills": [],
+                "projects": [],
+                "certifications": [],
+                "languages": [],
+                "accomplishments": [],
+                "interests": [],
+                "affiliations": [],
+                "publications": [],
+                "references": [],
+                "socialMedia": [],
+                "strengths": [],
+                "volunteering": [],
+                "internships": [],
+                "summaries": [],
+                "customSections": []
+            },
+            "isEditable": false
+        };
+
+        // Initialize form with sample data
+        function initializeForm() {
+            // Personal Info
+            document.getElementById('fullName').value = sampleData.personalInfo.fullName || '';
+            document.getElementById('firstName').value = sampleData.personalInfo.firstName || '';
+            document.getElementById('lastName').value = sampleData.personalInfo.lastName || '';
+            document.getElementById('professionalTitle').value = sampleData.personalInfo.professionalTitle || '';
+            document.getElementById('email').value = sampleData.personalInfo.email || '';
+            document.getElementById('phone').value = sampleData.personalInfo.phone || '';
+            document.getElementById('countryCode').value = sampleData.personalInfo.countryCode || '';
+            document.getElementById('dateOfBirth').value = sampleData.personalInfo.dateOfBirth || '';
+            document.getElementById('gender').value = sampleData.personalInfo.gender || '';
+            document.getElementById('nationality').value = sampleData.personalInfo.nationality || '';
+            document.getElementById('country').value = sampleData.personalInfo.country || '';
+            document.getElementById('state').value = sampleData.personalInfo.state || '';
+            document.getElementById('city').value = sampleData.personalInfo.city || '';
+            document.getElementById('streetNumber').value = sampleData.personalInfo.streetNumber || '';
+            document.getElementById('address').value = sampleData.personalInfo.address || '';
+            document.getElementById('postalZipCode').value = sampleData.personalInfo.postalZipCode || '';
+            document.getElementById('profileImage').value = sampleData.personalInfo.profileImage || '';
+            document.getElementById('profileDescription').value = sampleData.personalInfo.profileDescription || '';
+            document.getElementById('website').value = sampleData.personalInfo.website || '';
+            document.getElementById('linkedin').value = sampleData.personalInfo.linkedin || '';
+            document.getElementById('githubLink').value = sampleData.personalInfo.githubLink || '';
+            document.getElementById('drivingLicense').value = sampleData.personalInfo.drivingLicense || '';
+            document.getElementById('passportNumber').value = sampleData.personalInfo.passportNumber || '';
+            document.getElementById('maritalStatus').value = sampleData.personalInfo.maritalStatus || '';
+            document.getElementById('militaryService').value = sampleData.personalInfo.militaryService || '';
+
+            // Work Experience
+            renderArrayItems('workExperience', sampleData.sections.workExperience);
+
+            // Education
+            renderArrayItems('education', sampleData.sections.education);
+
+            // Skills
+            renderArrayItems('skills', sampleData.sections.skills);
+
+            // Projects
+            renderArrayItems('projects', sampleData.sections.projects);
+
+            // Certifications
+            renderArrayItems('certifications', sampleData.sections.certifications);
+
+            // Languages
+            renderArrayItems('languages', sampleData.sections.languages);
+
+            // Accomplishments
+            renderArrayItems('accomplishments', sampleData.sections.accomplishments);
+
+            // Interests
+            renderArrayItems('interests', sampleData.sections.interests);
+
+            // Affiliations
+            renderArrayItems('affiliations', sampleData.sections.affiliations);
+
+            // Publications
+            renderArrayItems('publications', sampleData.sections.publications);
+
+            // References
+            renderArrayItems('references', sampleData.sections.references);
+
+            // Social Media
+            renderArrayItems('socialMedia', sampleData.sections.socialMedia);
+
+            // Strengths
+            renderArrayItems('strengths', sampleData.sections.strengths);
+
+            // Volunteering
+            renderArrayItems('volunteering', sampleData.sections.volunteering);
+
+            // Internships
+            renderArrayItems('internships', sampleData.sections.internships);
+
+            // Summaries
+            renderArrayItems('summaries', sampleData.sections.summaries);
+
+            // Custom Sections
+            renderArrayItems('customSections', sampleData.sections.customSections);
+
+            // Add event listeners to all form elements for live preview
+            setTimeout(() => {
+                const formElements = document.querySelectorAll('input, textarea, select');
+                formElements.forEach(element => {
+                    element.addEventListener('input', debounce(() => updateResume(), 500));
+                    element.addEventListener('change', debounce(() => updateResume(), 500));
+                });
+            }, 100);
+        }
+
+        // Render array items for sections
+        function renderArrayItems(sectionName, items) {
+            const container = document.getElementById(`${sectionName}Container`);
+            container.innerHTML = '';
+
+            if (items && items.length > 0) {
+                items.forEach((item, index) => {
+                    const itemElement = createItemElement(sectionName, item, index);
+                    container.appendChild(itemElement);
+                });
+            }
+        }
+
+        // Create item element for array sections
+        function createItemElement(sectionName, item, index) {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'array-item';
+            itemDiv.innerHTML = `
+                <button class="remove-item" onclick="removeItem('${sectionName}', ${index})">Remove</button>
+            `;
+
+            switch (sectionName) {
+                case 'workExperience':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="company" value="${item.company || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Position</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="position" value="${item.position || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="city" value="${item.city || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="country" value="${item.country || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="startDate" value="${item.startDate || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="endDate" value="${item.endDate || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="isCurrent" ${item.isCurrent ? 'checked' : ''}> Current Position
+                            </label>
+                        </div>
+                    `;
+                    break;
+
+                case 'education':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Degree</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="degree" value="${item.degree || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>University</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="university" value="${item.university || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="city" value="${item.city || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="country" value="${item.country || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Start Year</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="startYear" value="${item.startYear || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>End Year</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="endYear" value="${item.endYear || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'skills':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Skill Name</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="skillName" value="${item.skillName || ''}">
+                        </div>
+                    `;
+                    break;
+
+                case 'projects':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Project Name</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="name" value="${item.name || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Project URL</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="projectUrl" value="${item.projectUrl || ''}">
+                        </div>
+                    `;
+                    break;
+
+                case 'certifications':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Certification Name</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="name" value="${item.name || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Issuer</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="issuer" value="${item.issuer || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="date" value="${item.date || ''}">
+                        </div>
+                    `;
+                    break;
+
+                case 'languages':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Language</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="name" value="${item.name || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Proficiency</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="proficiency" value="${item.proficiency || ''}">
+                        </div>
+                    `;
+                    break;
+
+                case 'accomplishments':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="title" value="${item.title || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'interests':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Interest</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="name" value="${item.name || ''}">
+                        </div>
+                    `;
+                    break;
+
+                case 'affiliations':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Organization</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="organization" value="${item.organization || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="role" value="${item.role || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="startDate" value="${item.startDate || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="endDate" value="${item.endDate || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'publications':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="title" value="${item.title || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Publisher</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="publisher" value="${item.publisher || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="date" value="${item.date || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'references':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="name" value="${item.name || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Position</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="position" value="${item.position || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="company" value="${item.company || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="email" value="${item.email || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="phone" value="${item.phone || ''}">
+                        </div>
+                    `;
+                    break;
+
+                case 'socialMedia':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Platform</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="platform" value="${item.platform || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>URL</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="url" value="${item.url || ''}">
+                        </div>
+                    `;
+                    break;
+
+                case 'strengths':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="title" value="${item.title || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'volunteering':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Organization</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="organization" value="${item.organization || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="role" value="${item.role || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="startDate" value="${item.startDate || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="endDate" value="${item.endDate || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'internships':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="company" value="${item.company || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Position</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="position" value="${item.position || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="city" value="${item.city || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="country" value="${item.country || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="startDate" value="${item.startDate || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="endDate" value="${item.endDate || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="description">${item.description || ''}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="isCurrent" ${item.isCurrent ? 'checked' : ''}> Current Position
+                            </label>
+                        </div>
+                    `;
+                    break;
+
+                case 'summaries':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="title" value="${item.title || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="content">${item.content || ''}</textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'customSections':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+
+                            <label>Title</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="title" value="${item.title || ''}">
+
+                            <label>Section Title</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="sectionTitle" value="${item.sectionTitle || item.title || ''}">
+
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="content">${item.content || ''}</textarea>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="isActive" ${(item.isActive !== false) ? 'checked' : ''}> Active
+                            </label>
+                        </div>
+
+                    `;
+                    break;
+            }
+
+            return itemDiv;
+        }
+
+        // Add new item to a section
+        function addItem(sectionName) {
+            const container = document.getElementById(`${sectionName}Container`);
+            const newIndex = container.children.length;
+
+            // Create a new empty item
+            const newItem = createNewItem(sectionName);
+
+            const itemElement = createItemElement(sectionName, newItem, newIndex);
+            container.appendChild(itemElement);
+
+            // Add event listeners to the new form elements for live preview
+            const newFormElements = itemElement.querySelectorAll('input, textarea, select');
+            newFormElements.forEach(element => {
+                element.addEventListener('input', debounce(updateResume, 500));
+                element.addEventListener('change', debounce(updateResume, 500));
+            });
+        }
+
+        // Create a new empty item based on section
+        function createNewItem(sectionName) {
+            switch (sectionName) {
+                case 'workExperience':
+                    return {
+                        id: `exp-${Date.now()}`,
+                        company: '',
+                        position: '',
+                        city: '',
+                        country: '',
+                        startDate: '',
+                        endDate: '',
+                        isCurrent: false,
+                        description: ''
+                    };
+                case 'education':
+                    return {
+                        id: `edu-${Date.now()}`,
+                        degree: '',
+                        university: '',
+                        city: '',
+                        country: '',
+                        startYear: '',
+                        endYear: '',
+                        description: ''
+                    };
+                case 'skills':
+                    return { skillName: '' };
+                case 'projects':
+                    return {
+                        id: `proj-${Date.now()}`,
+                        name: '',
+                        description: '',
+                        projectUrl: ''
+                    };
+                case 'certifications':
+                    return {
+                        id: `cert-${Date.now()}`,
+                        name: '',
+                        issuer: '',
+                        date: ''
+                    };
+                case 'languages':
+                    return {
+                        id: `lang-${Date.now()}`,
+                        name: '',
+                        proficiency: ''
+                    };
+                case 'accomplishments':
+                    return {
+                        id: `acc-${Date.now()}`,
+                        title: '',
+                        description: ''
+                    };
+                case 'interests':
+                    return { name: '' };
+                case 'affiliations':
+                    return {
+                        id: `aff-${Date.now()}`,
+                        organization: '',
+                        role: '',
+                        startDate: '',
+                        endDate: '',
+                        description: ''
+                    };
+                case 'publications':
+                    return {
+                        id: `pub-${Date.now()}`,
+                        title: '',
+                        publisher: '',
+                        date: '',
+                        description: ''
+                    };
+                case 'references':
+                    return {
+                        id: `ref-${Date.now()}`,
+                        name: '',
+                        position: '',
+                        company: '',
+                        email: '',
+                        phone: ''
+                    };
+                case 'socialMedia':
+                    return {
+                        id: `sm-${Date.now()}`,
+                        platform: '',
+                        url: ''
+                    };
+                case 'strengths':
+                    return {
+                        id: `str-${Date.now()}`,
+                        title: '',
+                        description: ''
+                    };
+                case 'volunteering':
+                    return {
+                        id: `vol-${Date.now()}`,
+                        organization: '',
+                        role: '',
+                        startDate: '',
+                        endDate: '',
+                        description: ''
+                    };
+                case 'internships':
+                    return {
+                        id: `int-${Date.now()}`,
+                        company: '',
+                        position: '',
+                        city: '',
+                        country: '',
+                        startDate: '',
+                        endDate: '',
+                        isCurrent: false,
+                        description: ''
+                    };
+                case 'summaries':
+                    return {
+                        id: `sum-${Date.now()}`,
+                        title: '',
+                        content: ''
+                    };
+                case 'customSections':
+                    return {
+                        id: `cus-${Date.now()}`,
+
+                        title: '',
+                        content: '',
+
+                        sectionTitle: '',
+                        content: '',
+                        isActive: true
+
+                    };
+                default:
+                    return {};
+            }
+        }
+
+        // Remove item from a section
+        function removeItem(sectionName, index) {
+            const container = document.getElementById(`${sectionName}Container`);
+            container.removeChild(container.children[index]);
+
+            // Re-index remaining items
+            for (let i = index; i < container.children.length; i++) {
+                const inputs = container.children[i].querySelectorAll('.item-field');
+                inputs.forEach(input => {
+                    const fieldIndex = parseInt(input.getAttribute('data-index'));
+                    if (fieldIndex > index) {
+                        input.setAttribute('data-index', fieldIndex - 1);
+                    }
+                });
+            }
+
+            // Update resume preview after removal
+            setTimeout(updateResume, 100);
+        }
+
+        // Collect form data
+        function collectFormData() {
+            const data = {
+                personalInfo: {
+                    fullName: document.getElementById('fullName').value,
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    professionalTitle: document.getElementById('professionalTitle').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    countryCode: document.getElementById('countryCode').value,
+                    dateOfBirth: document.getElementById('dateOfBirth').value,
+                    gender: document.getElementById('gender').value,
+                    nationality: document.getElementById('nationality').value,
+                    country: document.getElementById('country').value,
+                    state: document.getElementById('state').value,
+                    city: document.getElementById('city').value,
+                    streetNumber: document.getElementById('streetNumber').value,
+                    address: document.getElementById('address').value,
+                    postalZipCode: document.getElementById('postalZipCode').value,
+                    profileImage: document.getElementById('profileImage').value,
+                    profileDescription: document.getElementById('profileDescription').value,
+                    website: document.getElementById('website').value,
+                    linkedin: document.getElementById('linkedin').value,
+                    githubLink: document.getElementById('githubLink').value,
+                    drivingLicense: document.getElementById('drivingLicense').value,
+                    passportNumber: document.getElementById('passportNumber').value,
+                    maritalStatus: document.getElementById('maritalStatus').value,
+                    militaryService: document.getElementById('militaryService').value
+                },
+                sections: {
+                    workExperience: collectArrayData('workExperience'),
+                    education: collectArrayData('education'),
+                    skills: collectArrayData('skills'),
+                    projects: collectArrayData('projects'),
+                    certifications: collectArrayData('certifications'),
+                    languages: collectArrayData('languages'),
+                    accomplishments: collectArrayData('accomplishments'),
+                    interests: collectArrayData('interests'),
+                    affiliations: collectArrayData('affiliations'),
+                    publications: collectArrayData('publications'),
+                    references: collectArrayData('references'),
+                    socialMedia: collectArrayData('socialMedia'),
+                    strengths: collectArrayData('strengths'),
+                    volunteering: collectArrayData('volunteering'),
+                    internships: collectArrayData('internships'),
+                    summaries: collectArrayData('summaries'),
+                    customSections: collectArrayData('customSections')
+                },
+                isEditable: false
+            };
+
+            return data;
+        }
+
+        // Collect array data from form sections
+        function collectArrayData(sectionName) {
+            const container = document.getElementById(`${sectionName}Container`);
+            const items = [];
+
+            for (let i = 0; i < container.children.length; i++) {
+                const item = {};
+                const inputs = container.children[i].querySelectorAll('.item-field');
+
+                inputs.forEach(input => {
+                    const field = input.getAttribute('data-field');
+                    if (input.type === 'checkbox') {
+                        item[field] = input.checked;
+                    } else {
+                        item[field] = input.value;
+                    }
+                });
+
+                // Add ID for items that need it
+                if (!item.id) {
+                    switch (sectionName) {
+                        case 'workExperience':
+                            item.id = `exp-${Date.now()}-${i}`;
+                            break;
+                        case 'education':
+                            item.id = `edu-${Date.now()}-${i}`;
+                            break;
+                        case 'projects':
+                            item.id = `proj-${Date.now()}-${i}`;
+                            break;
+                        case 'certifications':
+                            item.id = `cert-${Date.now()}-${i}`;
+                            break;
+                        case 'languages':
+                            item.id = `lang-${Date.now()}-${i}`;
+                            break;
+                        case 'accomplishments':
+                            item.id = `acc-${Date.now()}-${i}`;
+                            break;
+                        case 'affiliations':
+                            item.id = `aff-${Date.now()}-${i}`;
+                            break;
+                        case 'publications':
+                            item.id = `pub-${Date.now()}-${i}`;
+                            break;
+                        case 'references':
+                            item.id = `ref-${Date.now()}-${i}`;
+                            break;
+                        case 'socialMedia':
+                            item.id = `sm-${Date.now()}-${i}`;
+                            break;
+                        case 'strengths':
+                            item.id = `str-${Date.now()}-${i}`;
+                            break;
+                        case 'volunteering':
+                            item.id = `vol-${Date.now()}-${i}`;
+                            break;
+                        case 'internships':
+                            item.id = `int-${Date.now()}-${i}`;
+                            break;
+                        case 'summaries':
+                            item.id = `sum-${Date.now()}-${i}`;
+                            break;
+                        case 'customSections':
+                            item.id = `cus-${Date.now()}-${i}`;
+                            break;
+                    }
+                }
+
+                items.push(item);
+            }
+
+            return items;
+        }
+
+        // Initialize the form when the page loads
+        window.onload = function () {
+            initializeForm();
+            // Add live preview functionality
+            setupLivePreview();
+        };
+
+        // Listen for messages from the resume template
+        window.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "TEMPLATE_READY") {
+                // Template is ready, send initial data
+                updateResume();
+            }
+        });
+
+        // Setup live preview functionality
+        function setupLivePreview() {
+            // Add event listeners to all input, textarea, and select elements
+            const formElements = document.querySelectorAll('input, textarea, select');
+            formElements.forEach(element => {
+                element.addEventListener('input', debounce(() => updateResume(), 500));
+                element.addEventListener('change', debounce(() => updateResume(), 500));
+            });
+
+            // Add event listeners to buttons that add/remove items
+            const addButtons = document.querySelectorAll('.add-item');
+            addButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Wait for the DOM to update before updating resume
+                    setTimeout(() => updateResume(), 100);
+                });
+            });
+
+            // We'll handle remove buttons dynamically since they're created/destroyed
+            const formSection = document.querySelector('.form-section');
+            formSection.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-item')) {
+                    // Wait for the DOM to update before updating resume
+                    setTimeout(() => updateResume(), 100);
+                }
+            });
+        }
+
+        // Debounce function to limit how often updateResume is called
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Update resume preview
+        function updateResume() {
+            const data = collectFormData();
+            const previewFrame = document.getElementById('previewFrame');
+
+            // Send data to the resume template via postMessage
+            previewFrame.contentWindow.postMessage({
+                type: "RESUME_DATA",
+                payload: data
+            }, "*");
+        }
+
+        // Change template
+        function changeTemplate() {
+            const templateSelector = document.getElementById('templateSelector');
+            const previewFrame = document.getElementById('previewFrame');
+            previewFrame.src = templateSelector.value;
+        }
+
+        function loadLocalFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const url = URL.createObjectURL(file);
+                const frame = document.getElementById('previewFrame');
+                frame.src = url;
+            }
+        }
+    </script>
+</body>
+
+</html>
