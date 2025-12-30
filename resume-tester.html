@@ -400,6 +400,66 @@
             background: #64748b;
         }
 
+        /* Color Picker Enhancements */
+        .color-picker-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .color-picker-group label {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .color-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 2;
+        }
+
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-preview:hover {
+            transform: scale(1.1);
+        }
+
+        .color-hex-input {
+            flex: 1;
+            padding: 8px 10px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text-primary);
+            font-family: 'Monaco', 'Courier New', monospace;
+            text-transform: uppercase;
+        }
+
+        .color-hex-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        }
+
+        input[type="color"] {
+            opacity: 0;
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
         /* Responsive */
         @media (max-width: 900px) {
             body {
@@ -524,8 +584,22 @@
                             <input type="text" id="postalZipCode" placeholder="Enter postal/zip code">
                         </div>
                         <div class="form-group">
-                            <label for="profileImage">Profile Image URL</label>
-                            <input type="text" id="profileImage" placeholder="Enter profile image URL">
+                            <label for="profileImage">Profile Image</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <button type="button" class="template-browse-btn"
+                                    style="flex: 1; padding: 10px; margin: 0;"
+                                    onclick="document.getElementById('profileImageInput').click()">
+                                    Choose Image
+                                </button>
+                                <img id="profileImagePreview" src=""
+                                    style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; display: none; border: 2px solid #475569;"
+                                    alt="Preview">
+                            </div>
+                            <input type="file" id="profileImageInput" accept="image/*"
+                                onchange="handleProfileImageSelect(this)" style="display: none;">
+                            <input type="hidden" id="profileImage" value="">
+                            <small id="profileImageName"
+                                style="color: #94a3b8; font-size: 12px; display: none; margin-top: 5px;"></small>
                         </div>
                         <div class="form-group">
                             <label for="profileDescription">Profile Description</label>
@@ -789,6 +863,99 @@
                     </div>
                 </div>
 
+                <!-- Theme Colors Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Theme Colors</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="color-picker-group">
+                            <label for="primaryColor">Primary Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="primaryColorPreview"
+                                        style="background-color: #222222;"
+                                        onclick="document.getElementById('primaryColor').click()"></div>
+                                    <input type="color" id="primaryColor" value="#222222"
+                                        onchange="updateColorPreview('primaryColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="primaryColorHex" value="#222222"
+                                    oninput="updateColorFromHex('primaryColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="backgroundColor">Background Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="backgroundColorPreview"
+                                        style="background-color: #ffffff;"
+                                        onclick="document.getElementById('backgroundColor').click()"></div>
+                                    <input type="color" id="backgroundColor" value="#ffffff"
+                                        onchange="updateColorPreview('backgroundColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="backgroundColorHex" value="#FFFFFF"
+                                    oninput="updateColorFromHex('backgroundColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="textColor">Text Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="textColorPreview" style="background-color: #333333;"
+                                        onclick="document.getElementById('textColor').click()"></div>
+                                    <input type="color" id="textColor" value="#333333"
+                                        onchange="updateColorPreview('textColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="textColorHex" value="#333333"
+                                    oninput="updateColorFromHex('textColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="headingColor">Heading Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="headingColorPreview"
+                                        style="background-color: #222222;"
+                                        onclick="document.getElementById('headingColor').click()"></div>
+                                    <input type="color" id="headingColor" value="#222222"
+                                        onchange="updateColorPreview('headingColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="headingColorHex" value="#222222"
+                                    oninput="updateColorFromHex('headingColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="accentColor">Accent Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="accentColorPreview"
+                                        style="background-color: #6366f1;"
+                                        onclick="document.getElementById('accentColor').click()"></div>
+                                    <input type="color" id="accentColor" value="#6366f1"
+                                        onchange="updateColorPreview('accentColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="accentColorHex" value="#6366F1"
+                                    oninput="updateColorFromHex('accentColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="borderColor">Border Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="borderColorPreview"
+                                        style="background-color: #dddddd;"
+                                        onclick="document.getElementById('borderColor').click()"></div>
+                                    <input type="color" id="borderColor" value="#dddddd"
+                                        onchange="updateColorPreview('borderColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="borderColorHex" value="#DDDDDD"
+                                    oninput="updateColorFromHex('borderColor')" maxlength="7">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Hidden button maintained for compatibility if needed, but we use live updates now -->
                 <button class="btn-update" onclick="updateResume()" style="display:none;">Update Resume</button>
             </div>
@@ -848,6 +1015,43 @@
 
         function toggleSection(header) {
             header.parentElement.classList.toggle('open');
+        }
+
+        // Color picker helper functions
+        function updateColorPreview(colorId) {
+            const colorInput = document.getElementById(colorId);
+            const preview = document.getElementById(colorId + 'Preview');
+            const hexInput = document.getElementById(colorId + 'Hex');
+
+            const colorValue = colorInput.value;
+            preview.style.backgroundColor = colorValue;
+            hexInput.value = colorValue.toUpperCase();
+
+            // Trigger live preview update
+            updateResume();
+        }
+
+        function updateColorFromHex(colorId) {
+            const hexInput = document.getElementById(colorId + 'Hex');
+            const colorInput = document.getElementById(colorId);
+            const preview = document.getElementById(colorId + 'Preview');
+
+            let hexValue = hexInput.value.trim();
+
+            // Add # if missing
+            if (!hexValue.startsWith('#')) {
+                hexValue = '#' + hexValue;
+            }
+
+            // Validate hex color
+            if (/^#[0-9A-F]{6}$/i.test(hexValue)) {
+                colorInput.value = hexValue;
+                preview.style.backgroundColor = hexValue;
+                hexInput.value = hexValue.toUpperCase();
+
+                // Trigger live preview update
+                updateResume();
+            }
         }
 
         function switchTab(tabName) {
@@ -917,7 +1121,17 @@
                 "summaries": [],
                 "customSections": []
             },
-            "isEditable": false
+            "isEditable": false,
+            "theme": {
+                "colors": {
+                    "--primary-color": "#222222",
+                    "--background-color": "#ffffff",
+                    "--text-color": "#333333",
+                    "--heading-color": "#222222",
+                    "--accent-color": "#6366f1",
+                    "--border-color": "#dddddd"
+                }
+            }
         };
 
         // Initialize form with sample data
@@ -999,6 +1213,28 @@
 
             // Custom Sections
             renderArrayItems('customSections', sampleData.sections.customSections);
+
+            // Theme Colors
+            if (sampleData.theme && sampleData.theme.colors) {
+                const setColor = (id, value) => {
+                    const colorInput = document.getElementById(id);
+                    const hexInput = document.getElementById(id + 'Hex');
+                    const preview = document.getElementById(id + 'Preview');
+
+                    if (colorInput && hexInput && preview) {
+                        colorInput.value = value;
+                        hexInput.value = value.toUpperCase();
+                        preview.style.backgroundColor = value;
+                    }
+                };
+
+                setColor('primaryColor', sampleData.theme.colors['--primary-color'] || '#222222');
+                setColor('backgroundColor', sampleData.theme.colors['--background-color'] || '#ffffff');
+                setColor('textColor', sampleData.theme.colors['--text-color'] || '#333333');
+                setColor('headingColor', sampleData.theme.colors['--heading-color'] || '#222222');
+                setColor('accentColor', sampleData.theme.colors['--accent-color'] || '#6366f1');
+                setColor('borderColor', sampleData.theme.colors['--border-color'] || '#dddddd');
+            }
 
             // Add event listeners to all form elements for live preview
             setTimeout(() => {
@@ -1610,7 +1846,17 @@
                     summaries: collectArrayData('summaries'),
                     customSections: collectArrayData('customSections')
                 },
-                isEditable: false
+                isEditable: false,
+                theme: {
+                    colors: {
+                        '--primary-color': document.getElementById('primaryColor')?.value || '#222222',
+                        '--background-color': document.getElementById('backgroundColor')?.value || '#ffffff',
+                        '--text-color': document.getElementById('textColor')?.value || '#333333',
+                        '--heading-color': document.getElementById('headingColor')?.value || '#222222',
+                        '--accent-color': document.getElementById('accentColor')?.value || '#6366f1',
+                        '--border-color': document.getElementById('borderColor')?.value || '#dddddd'
+                    }
+                }
             };
 
             return data;
@@ -1757,6 +2003,14 @@
                 type: "RESUME_DATA",
                 payload: data
             }, "*");
+
+            // Send theme change separately for instant color updates
+            if (data.theme) {
+                previewFrame.contentWindow.postMessage({
+                    type: "CHANGE_THEME",
+                    payload: data.theme
+                }, "*");
+            }
         }
 
         // Change template
@@ -1764,6 +2018,35 @@
             const templateSelector = document.getElementById('templateSelector');
             const previewFrame = document.getElementById('previewFrame');
             previewFrame.src = templateSelector.value;
+        }
+
+        function handleProfileImageSelect(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const base64Image = e.target.result;
+
+                    // Update hidden input with base64 data
+                    document.getElementById('profileImage').value = base64Image;
+
+                    // Update preview image
+                    const preview = document.getElementById('profileImagePreview');
+                    preview.src = base64Image;
+                    preview.style.display = 'block';
+
+                    // Show filename
+                    const nameDisplay = document.getElementById('profileImageName');
+                    nameDisplay.textContent = file.name;
+                    nameDisplay.style.display = 'block';
+
+                    // Trigger update
+                    updateResume();
+                };
+
+                reader.readAsDataURL(file);
+            }
         }
 
         function loadLocalFile(input) {

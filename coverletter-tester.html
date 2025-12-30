@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Letter Template Tester</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --sidebar-bg: #1e293b;
+            --main-bg: #334155;
+            --panel-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --border-color: #334155;
+            --input-bg: #0f172a;
+            --input-border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--main-bg);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 380px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--accent-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--sidebar-bg);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tab-pane {
+            padding: 20px;
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Form Components */
+        .section {
+            background-color: transparent;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            padding: 0;
+            box-shadow: none;
+            border: none;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .section-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .section-content {
+            display: none;
+            padding-top: 5px;
+        }
+
+        .section.open .section-content {
+            display: block;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+            color: var(--text-secondary);
+            font-size: 10px;
+        }
+
+        .section.open .toggle-icon {
+            transform: rotate(180deg);
+            color: var(--accent-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #475569;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        /* Color Picker Enhancements */
+        .color-picker-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .color-picker-group label {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .color-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 2;
+        }
+
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-preview:hover {
+            transform: scale(1.1);
+        }
+
+        .color-hex-input {
+            flex: 1;
+            padding: 8px 10px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text-primary);
+            font-family: 'Monaco', 'Courier New', monospace;
+            text-transform: uppercase;
+        }
+
+        .color-hex-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        }
+
+        input[type="color"] {
+            opacity: 0;
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        /* Array Items */
+        .array-section {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            margin-top: 10px;
+        }
+
+        .array-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .remove-item {
+            background-color: transparent;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .remove-item:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .add-item {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px dashed var(--accent-color);
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .add-item:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--sidebar-bg);
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-snapshot {
+            flex: 1;
+            padding: 12px;
+            background-color: #334155;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .btn-snapshot:hover {
+            background-color: #475569;
+        }
+
+        .btn-reset {
+            flex: 1;
+            padding: 12px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .btn-reset:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-update {
+            display: none;
+        }
+
+        /* Template Selector Styles */
+        .template-browse-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .template-selector-container {
+            margin-bottom: 20px;
+        }
+
+        .template-selector-container h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Main Preview Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #2d3748;
+            position: relative;
+        }
+
+        .top-bar {
+            height: 48px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .preview-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            overflow: auto;
+            background-color: #3f4451;
+        }
+
+        .preview-frame {
+            width: 210mm;
+            min-height: 297mm;
+            height: 297mm;
+            background-color: white;
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--sidebar-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 50vh;
+            }
+
+            .main-content {
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon"></div>
+            <h2>Cover Letter Tester</h2>
+        </div>
+
+        <div class="sidebar-tabs">
+            <div class="tab active" onclick="switchTab('templates')">Templates</div>
+            <div class="tab" onclick="switchTab('editor')">Data Editor</div>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Templates Tab -->
+            <div id="tab-templates" class="tab-pane active">
+                <div style="margin-top: 20px;">
+                    <button class="template-browse-btn" onclick="document.getElementById('file-input').click()">
+                        + Add Global Template
+                    </button>
+                    <input type="file" id="file-input" accept=".html" onchange="loadLocalFile(this)"
+                        style="display: none;">
+                </div>
+            </div>
+
+            <!-- Editor Tab -->
+            <div id="tab-editor" class="tab-pane">
+                <!-- Name and Contact Section -->
+                <div class="section open">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Name & Contact</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" placeholder="Enter full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" placeholder="Enter phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="addressLine1">Address Line 1</label>
+                            <input type="text" id="addressLine1" placeholder="Enter address line 1">
+                        </div>
+                        <div class="form-group">
+                            <label for="addressLine2">Address Line 2</label>
+                            <input type="text" id="addressLine2" placeholder="Enter address line 2">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" placeholder="Enter state">
+                        </div>
+                        <div class="form-group">
+                            <label for="postalCode">Postal Code</label>
+                            <input type="text" id="postalCode" placeholder="Enter postal code">
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input type="text" id="country" placeholder="Enter country">
+                        </div>
+                        <div class="form-group">
+                            <label for="linkedin">LinkedIn</label>
+                            <input type="text" id="linkedin" placeholder="Enter LinkedIn URL">
+                        </div>
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="text" id="website" placeholder="Enter website URL">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Date</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="text" id="date" placeholder="Enter date (e.g., December 13, 2025)">
+                        </div>
+                        <div class="form-group">
+                            <label for="dateFormat">Date Format</label>
+                            <select id="dateFormat">
+                                <option value="long">Long (e.g., December 13, 2025)</option>
+                                <option value="short">Short (e.g., 12/13/2025)</option>
+                                <option value="medium">Medium (e.g., Dec 13, 2025)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipient Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Recipient</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="hiringManagerName">Hiring Manager Name</label>
+                            <input type="text" id="hiringManagerName" placeholder="Enter hiring manager name">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" placeholder="Enter title">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyName">Company Name</label>
+                            <input type="text" id="companyName" placeholder="Enter company name">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientAddressLine1">Address Line 1</label>
+                            <input type="text" id="recipientAddressLine1" placeholder="Enter address line 1">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientAddressLine2">Address Line 2</label>
+                            <input type="text" id="recipientAddressLine2" placeholder="Enter address line 2">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientCity">City</label>
+                            <input type="text" id="recipientCity" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientState">State</label>
+                            <input type="text" id="recipientState" placeholder="Enter state">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientPostalCode">Postal Code</label>
+                            <input type="text" id="recipientPostalCode" placeholder="Enter postal code">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientCountry">Country</label>
+                            <input type="text" id="recipientCountry" placeholder="Enter country">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subject Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Subject</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" placeholder="Enter subject">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Greeting Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Greeting</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="greeting">Greeting</label>
+                            <input type="text" id="greeting" placeholder="Enter greeting (e.g., Dear Hiring Team,)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opening Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Opening</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="openingParagraph">Opening Paragraph</label>
+                            <textarea id="openingParagraph" placeholder="Enter opening paragraph"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Letter Body Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Letter Body</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div id="paragraphsContainer"></div>
+                        <button class="add-item" onclick="addItem('paragraphs')">Add Paragraph</button>
+
+                        <div style="margin-top: 20px;">
+                            <h4 style="font-size: 13px; color: var(--text-secondary); margin-bottom: 10px;">Key Skills
+                            </h4>
+                            <div id="keySkillsContainer"></div>
+                            <button class="add-item" onclick="addItem('keySkills')">Add Key Skill</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gap Explanation Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Gap Explanation</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="hasGap"> Has Gap
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="gapExplanation">Gap Explanation</label>
+                            <textarea id="gapExplanation" placeholder="Explain employment gap"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="gapPeriod">Gap Period</label>
+                            <input type="text" id="gapPeriod" placeholder="Enter gap period">
+                        </div>
+                        <div class="form-group">
+                            <label for="gapReason">Gap Reason</label>
+                            <input type="text" id="gapReason" placeholder="Enter gap reason">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Call to Action</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="callToActionParagraph">Call to Action Paragraph</label>
+                            <textarea id="callToActionParagraph"
+                                placeholder="Enter call to action paragraph"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Closing Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Closing</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="closing">Closing</label>
+                            <input type="text" id="closing" placeholder="Enter closing (e.g., Sincerely,)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signature Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Signature</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="signatureName">Name</label>
+                            <input type="text" id="signatureName" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="typedName"> Typed Name
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="includeContactBelow"> Include Contact Below
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Availability Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Availability</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="includeAvailability"> Include Availability
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="startDate">Start Date</label>
+                            <input type="text" id="startDate" placeholder="Enter start date">
+                        </div>
+                        <div class="form-group">
+                            <label for="noticePeriod">Notice Period</label>
+                            <input type="text" id="noticePeriod" placeholder="Enter notice period">
+                        </div>
+                        <div class="form-group">
+                            <label for="preferredStartDate">Preferred Start Date</label>
+                            <input type="text" id="preferredStartDate" placeholder="Enter preferred start date">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confidentiality Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Confidentiality</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="includeConfidentiality"> Include Confidentiality
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="confidentialityNote">Note</label>
+                            <input type="text" id="confidentialityNote" placeholder="Enter confidentiality note">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Relocation Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Relocation</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="includeRelocation"> Include Relocation
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="willingToRelocate"> Willing to Relocate
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="requiresSponsorship"> Requires Sponsorship
+                            </label>
+                        </div>
+                        <div id="preferredLocationsContainer"></div>
+                        <button class="add-item" onclick="addItem('preferredLocations')">Add Preferred Location</button>
+                    </div>
+                </div>
+
+                <!-- Salary Requirements Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Salary Requirements</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="includeSalary"> Include Salary
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="minSalary">Min Salary</label>
+                            <input type="text" id="minSalary" placeholder="Enter minimum salary">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxSalary">Max Salary</label>
+                            <input type="text" id="maxSalary" placeholder="Enter maximum salary">
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">Currency</label>
+                            <input type="text" id="currency" placeholder="Enter currency (e.g., USD)">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="negotiable"> Negotiable
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Colors Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Theme Colors</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="color-picker-group">
+                            <label for="primaryColor">Primary Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="primaryColorPreview"
+                                        style="background-color: #222222;"
+                                        onclick="document.getElementById('primaryColor').click()"></div>
+                                    <input type="color" id="primaryColor" value="#222222"
+                                        onchange="updateColorPreview('primaryColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="primaryColorHex" value="#222222"
+                                    oninput="updateColorFromHex('primaryColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="backgroundColor">Background Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="backgroundColorPreview"
+                                        style="background-color: #ffffff;"
+                                        onclick="document.getElementById('backgroundColor').click()"></div>
+                                    <input type="color" id="backgroundColor" value="#ffffff"
+                                        onchange="updateColorPreview('backgroundColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="backgroundColorHex" value="#FFFFFF"
+                                    oninput="updateColorFromHex('backgroundColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="textColor">Text Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="textColorPreview" style="background-color: #333333;"
+                                        onclick="document.getElementById('textColor').click()"></div>
+                                    <input type="color" id="textColor" value="#333333"
+                                        onchange="updateColorPreview('textColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="textColorHex" value="#333333"
+                                    oninput="updateColorFromHex('textColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="headingColor">Heading Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="headingColorPreview"
+                                        style="background-color: #222222;"
+                                        onclick="document.getElementById('headingColor').click()"></div>
+                                    <input type="color" id="headingColor" value="#222222"
+                                        onchange="updateColorPreview('headingColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="headingColorHex" value="#222222"
+                                    oninput="updateColorFromHex('headingColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="accentColor">Accent Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="accentColorPreview"
+                                        style="background-color: #f4f4f4;"
+                                        onclick="document.getElementById('accentColor').click()"></div>
+                                    <input type="color" id="accentColor" value="#f4f4f4"
+                                        onchange="updateColorPreview('accentColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="accentColorHex" value="#F4F4F4"
+                                    oninput="updateColorFromHex('accentColor')" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-picker-group">
+                            <label for="borderColor">Border Color</label>
+                            <div class="color-input-wrapper">
+                                <div style="position: relative;">
+                                    <div class="color-preview" id="borderColorPreview"
+                                        style="background-color: #dddddd;"
+                                        onclick="document.getElementById('borderColor').click()"></div>
+                                    <input type="color" id="borderColor" value="#dddddd"
+                                        onchange="updateColorPreview('borderColor')">
+                                </div>
+                                <input type="text" class="color-hex-input" id="borderColorHex" value="#DDDDDD"
+                                    oninput="updateColorFromHex('borderColor')" maxlength="7">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Settings Section -->
+                <div class="section">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h3>Additional Settings</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="language">Language</label>
+                            <select id="language">
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tone">Tone</label>
+                            <select id="tone">
+                                <option value="professional">Professional</option>
+                                <option value="casual">Casual</option>
+                                <option value="formal">Formal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="templateId">Template ID</label>
+                            <input type="text" id="templateId" placeholder="Enter template ID">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-update" onclick="updateCoverLetter()" style="display:none;">Update Cover
+                    Letter</button>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn-snapshot" onclick="takeSnapshot()">Snapshot</button>
+            <button class="btn-reset" onclick="location.reload()">Reset Data</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">Data loaded</div>
+        <div class="preview-wrapper">
+            <iframe id="previewFrame" class="preview-frame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        function takeSnapshot() {
+            const frame = document.getElementById('previewFrame');
+            try {
+                const body = frame.contentDocument.body;
+
+                const originalBg = body.style.backgroundColor;
+                if (!originalBg || originalBg === 'transparent') {
+                    body.style.backgroundColor = 'white';
+                }
+
+                html2canvas(body, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    windowWidth: body.scrollWidth,
+                    windowHeight: body.scrollHeight
+                }).then(canvas => {
+                    body.style.backgroundColor = originalBg;
+
+                    const link = document.createElement('a');
+                    link.download = 'coverletter-snapshot.png';
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }).catch(err => {
+                    console.error("Snapshot failed:", err);
+                    alert("Failed to create snapshot. Ensure you are running on a local server or have proper file permissions.");
+                });
+            } catch (e) {
+                console.error(e);
+                alert("Cannot access iframe content. This usually happens due to Cross-Origin restrictions (CORS) when opening files directly from disk. Please try running this via a local server (e.g. VS Code Live Server).");
+            }
+        }
+
+        function toggleSection(header) {
+            header.parentElement.classList.toggle('open');
+        }
+
+        // Color picker helper functions
+        function updateColorPreview(colorId) {
+            const colorInput = document.getElementById(colorId);
+            const preview = document.getElementById(colorId + 'Preview');
+            const hexInput = document.getElementById(colorId + 'Hex');
+
+            const colorValue = colorInput.value;
+            preview.style.backgroundColor = colorValue;
+            hexInput.value = colorValue.toUpperCase();
+
+            // Trigger live preview update
+            updateCoverLetter();
+        }
+
+        function updateColorFromHex(colorId) {
+            const hexInput = document.getElementById(colorId + 'Hex');
+            const colorInput = document.getElementById(colorId);
+            const preview = document.getElementById(colorId + 'Preview');
+
+            let hexValue = hexInput.value.trim();
+
+            // Add # if missing
+            if (!hexValue.startsWith('#')) {
+                hexValue = '#' + hexValue;
+            }
+
+            // Validate hex color
+            if (/^#[0-9A-F]{6}$/i.test(hexValue)) {
+                colorInput.value = hexValue;
+                preview.style.backgroundColor = hexValue;
+                hexInput.value = hexValue.toUpperCase();
+
+                // Trigger live preview update
+                updateCoverLetter();
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            document.getElementById('tab-' + tabName).classList.add('active');
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll(`.tab[onclick*="${tabName}"]`).forEach(tab => {
+                tab.classList.add('active');
+            });
+        }
+
+        // Initialize with data from index.json
+        const sampleData = {
+            "nameAndContact": {
+                "fullName": "",
+                "email": "",
+                "phone": "",
+                "addressLine1": "",
+                "addressLine2": "",
+                "city": "",
+                "state": "",
+                "postalCode": "",
+                "country": "",
+                "linkedin": "",
+                "website": ""
+            },
+            "date": {
+                "date": "",
+                "format": "long"
+            },
+            "recipient": {
+                "hiringManagerName": "",
+                "title": "",
+                "companyName": "",
+                "addressLine1": "",
+                "addressLine2": "",
+                "city": "",
+                "state": "",
+                "postalCode": "",
+                "country": ""
+            },
+            "subject": {
+                "subject": ""
+            },
+            "greeting": {
+                "greeting": ""
+            },
+            "opening": {
+                "paragraph": ""
+            },
+            "letterBody": {
+                "paragraphs": [],
+                "keySkills": []
+            },
+            "gapExplanation": {
+                "hasGap": false,
+                "gapExplanation": "",
+                "gapPeriod": "",
+                "gapReason": ""
+            },
+            "callToAction": {
+                "paragraph": ""
+            },
+            "closing": {
+                "closing": ""
+            },
+            "signature": {
+                "name": "",
+                "typedName": true,
+                "includeContactBelow": false
+            },
+            "availability": {
+                "includeAvailability": false,
+                "startDate": "",
+                "noticePeriod": "",
+                "preferredStartDate": ""
+            },
+            "confidentiality": {
+                "includeConfidentiality": false,
+                "note": ""
+            },
+            "relocation": {
+                "includeRelocation": false,
+                "willingToRelocate": false,
+                "preferredLocations": [],
+                "requiresSponsorship": false
+            },
+            "salaryRequirements": {
+                "includeSalary": false,
+                "minSalary": "",
+                "maxSalary": "",
+                "currency": "USD",
+                "negotiable": false
+            },
+            "language": "en",
+            "tone": "professional",
+            "templateId": "",
+            "theme": {
+                "colors": {
+                    "--primary-color": "#222222",
+                    "--background-color": "#ffffff",
+                    "--text-color": "#333333",
+                    "--heading-color": "#222222",
+                    "--accent-color": "#f4f4f4",
+                    "--border-color": "#dddddd"
+                }
+            }
+        };
+
+        // Load data from index.json
+        async function loadIndexData() {
+            try {
+                const response = await fetch('index.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    Object.assign(sampleData, data);
+                    initializeForm();
+                }
+            } catch (error) {
+                console.log('No index.json found or error loading it, using empty data');
+                initializeForm();
+            }
+        }
+
+        function initializeForm() {
+            // Name and Contact
+            document.getElementById('fullName').value = sampleData.nameAndContact?.fullName || '';
+            document.getElementById('email').value = sampleData.nameAndContact?.email || '';
+            document.getElementById('phone').value = sampleData.nameAndContact?.phone || '';
+            document.getElementById('addressLine1').value = sampleData.nameAndContact?.addressLine1 || '';
+            document.getElementById('addressLine2').value = sampleData.nameAndContact?.addressLine2 || '';
+            document.getElementById('city').value = sampleData.nameAndContact?.city || '';
+            document.getElementById('state').value = sampleData.nameAndContact?.state || '';
+            document.getElementById('postalCode').value = sampleData.nameAndContact?.postalCode || '';
+            document.getElementById('country').value = sampleData.nameAndContact?.country || '';
+            document.getElementById('linkedin').value = sampleData.nameAndContact?.linkedin || '';
+            document.getElementById('website').value = sampleData.nameAndContact?.website || '';
+
+            // Date
+            document.getElementById('date').value = sampleData.date?.date || '';
+            document.getElementById('dateFormat').value = sampleData.date?.format || 'long';
+
+            // Recipient
+            document.getElementById('hiringManagerName').value = sampleData.recipient?.hiringManagerName || '';
+            document.getElementById('title').value = sampleData.recipient?.title || '';
+            document.getElementById('companyName').value = sampleData.recipient?.companyName || '';
+            document.getElementById('recipientAddressLine1').value = sampleData.recipient?.addressLine1 || '';
+            document.getElementById('recipientAddressLine2').value = sampleData.recipient?.addressLine2 || '';
+            document.getElementById('recipientCity').value = sampleData.recipient?.city || '';
+            document.getElementById('recipientState').value = sampleData.recipient?.state || '';
+            document.getElementById('recipientPostalCode').value = sampleData.recipient?.postalCode || '';
+            document.getElementById('recipientCountry').value = sampleData.recipient?.country || '';
+
+            // Subject
+            document.getElementById('subject').value = sampleData.subject?.subject || '';
+
+            // Greeting
+            document.getElementById('greeting').value = sampleData.greeting?.greeting || '';
+
+            // Opening
+            document.getElementById('openingParagraph').value = sampleData.opening?.paragraph || '';
+
+            // Letter Body
+            renderArrayItems('paragraphs', sampleData.letterBody?.paragraphs || []);
+            renderArrayItems('keySkills', sampleData.letterBody?.keySkills || []);
+
+            // Gap Explanation
+            document.getElementById('hasGap').checked = sampleData.gapExplanation?.hasGap || false;
+            document.getElementById('gapExplanation').value = sampleData.gapExplanation?.gapExplanation || '';
+            document.getElementById('gapPeriod').value = sampleData.gapExplanation?.gapPeriod || '';
+            document.getElementById('gapReason').value = sampleData.gapExplanation?.gapReason || '';
+
+            // Call to Action
+            document.getElementById('callToActionParagraph').value = sampleData.callToAction?.paragraph || '';
+
+            // Closing
+            document.getElementById('closing').value = sampleData.closing?.closing || '';
+
+            // Signature
+            document.getElementById('signatureName').value = sampleData.signature?.name || '';
+            document.getElementById('typedName').checked = sampleData.signature?.typedName !== false;
+            document.getElementById('includeContactBelow').checked = sampleData.signature?.includeContactBelow || false;
+
+            // Availability
+            document.getElementById('includeAvailability').checked = sampleData.availability?.includeAvailability || false;
+            document.getElementById('startDate').value = sampleData.availability?.startDate || '';
+            document.getElementById('noticePeriod').value = sampleData.availability?.noticePeriod || '';
+            document.getElementById('preferredStartDate').value = sampleData.availability?.preferredStartDate || '';
+
+            // Confidentiality
+            document.getElementById('includeConfidentiality').checked = sampleData.confidentiality?.includeConfidentiality || false;
+            document.getElementById('confidentialityNote').value = sampleData.confidentiality?.note || '';
+
+            // Relocation
+            document.getElementById('includeRelocation').checked = sampleData.relocation?.includeRelocation || false;
+            document.getElementById('willingToRelocate').checked = sampleData.relocation?.willingToRelocate || false;
+            document.getElementById('requiresSponsorship').checked = sampleData.relocation?.requiresSponsorship || false;
+            renderArrayItems('preferredLocations', sampleData.relocation?.preferredLocations || []);
+
+            // Salary Requirements
+            document.getElementById('includeSalary').checked = sampleData.salaryRequirements?.includeSalary || false;
+            document.getElementById('minSalary').value = sampleData.salaryRequirements?.minSalary || '';
+            document.getElementById('maxSalary').value = sampleData.salaryRequirements?.maxSalary || '';
+            document.getElementById('currency').value = sampleData.salaryRequirements?.currency || 'USD';
+            document.getElementById('negotiable').checked = sampleData.salaryRequirements?.negotiable || false;
+
+            // Additional Settings
+            document.getElementById('language').value = sampleData.language || 'en';
+            document.getElementById('tone').value = sampleData.tone || 'professional';
+            document.getElementById('templateId').value = sampleData.templateId || '';
+
+            // Theme Colors
+            if (sampleData.theme && sampleData.theme.colors) {
+                const setColor = (id, value) => {
+                    const colorInput = document.getElementById(id);
+                    const hexInput = document.getElementById(id + 'Hex');
+                    const preview = document.getElementById(id + 'Preview');
+
+                    colorInput.value = value;
+                    hexInput.value = value.toUpperCase();
+                    preview.style.backgroundColor = value;
+                };
+
+                setColor('primaryColor', sampleData.theme.colors['--primary-color'] || '#222222');
+                setColor('backgroundColor', sampleData.theme.colors['--background-color'] || '#ffffff');
+                setColor('textColor', sampleData.theme.colors['--text-color'] || '#333333');
+                setColor('headingColor', sampleData.theme.colors['--heading-color'] || '#222222');
+                setColor('accentColor', sampleData.theme.colors['--accent-color'] || '#f4f4f4');
+                setColor('borderColor', sampleData.theme.colors['--border-color'] || '#dddddd');
+            }
+
+            // Add event listeners for live preview
+            setTimeout(() => {
+                const formElements = document.querySelectorAll('input, textarea, select');
+                formElements.forEach(element => {
+                    element.addEventListener('input', debounce(() => updateCoverLetter(), 500));
+                    element.addEventListener('change', debounce(() => updateCoverLetter(), 500));
+                });
+            }, 100);
+        }
+
+        function renderArrayItems(sectionName, items) {
+            const container = document.getElementById(`${sectionName}Container`);
+            container.innerHTML = '';
+
+            if (items && items.length > 0) {
+                items.forEach((item, index) => {
+                    const itemElement = createItemElement(sectionName, item, index);
+                    container.appendChild(itemElement);
+                });
+            }
+        }
+
+        function createItemElement(sectionName, item, index) {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'array-item';
+            itemDiv.innerHTML = `
+                <button class="remove-item" onclick="removeItem('${sectionName}', ${index})">Remove</button>
+            `;
+
+            switch (sectionName) {
+                case 'paragraphs':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Paragraph ${index + 1}</label>
+                            <textarea class="item-field" data-section="${sectionName}" data-index="${index}" data-field="text">${typeof item === 'string' ? item : item.text || ''}</textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'keySkills':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Skill ${index + 1}</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="skill" value="${typeof item === 'string' ? item : item.skill || ''}">
+                        </div>
+                    `;
+                    break;
+
+                case 'preferredLocations':
+                    itemDiv.innerHTML += `
+                        <div class="form-group">
+                            <label>Location ${index + 1}</label>
+                            <input type="text" class="item-field" data-section="${sectionName}" data-index="${index}" data-field="location" value="${typeof item === 'string' ? item : item.location || ''}">
+                        </div>
+                    `;
+                    break;
+            }
+
+            return itemDiv;
+        }
+
+        function addItem(sectionName) {
+            const container = document.getElementById(`${sectionName}Container`);
+            const newIndex = container.children.length;
+
+            const newItem = createNewItem(sectionName);
+            const itemElement = createItemElement(sectionName, newItem, newIndex);
+            container.appendChild(itemElement);
+
+            const newFormElements = itemElement.querySelectorAll('input, textarea, select');
+            newFormElements.forEach(element => {
+                element.addEventListener('input', debounce(updateCoverLetter, 500));
+                element.addEventListener('change', debounce(updateCoverLetter, 500));
+            });
+        }
+
+        function createNewItem(sectionName) {
+            switch (sectionName) {
+                case 'paragraphs':
+                    return '';
+                case 'keySkills':
+                    return '';
+                case 'preferredLocations':
+                    return '';
+                default:
+                    return '';
+            }
+        }
+
+        function removeItem(sectionName, index) {
+            const container = document.getElementById(`${sectionName}Container`);
+            container.removeChild(container.children[index]);
+
+            for (let i = index; i < container.children.length; i++) {
+                const inputs = container.children[i].querySelectorAll('.item-field');
+                inputs.forEach(input => {
+                    const fieldIndex = parseInt(input.getAttribute('data-index'));
+                    if (fieldIndex > index) {
+                        input.setAttribute('data-index', fieldIndex - 1);
+                    }
+                });
+            }
+
+            setTimeout(updateCoverLetter, 100);
+        }
+
+        function collectFormData() {
+            const data = {
+                nameAndContact: {
+                    fullName: document.getElementById('fullName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    addressLine1: document.getElementById('addressLine1').value,
+                    addressLine2: document.getElementById('addressLine2').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    postalCode: document.getElementById('postalCode').value,
+                    country: document.getElementById('country').value,
+                    linkedin: document.getElementById('linkedin').value,
+                    website: document.getElementById('website').value
+                },
+                date: {
+                    date: document.getElementById('date').value,
+                    format: document.getElementById('dateFormat').value
+                },
+                recipient: {
+                    hiringManagerName: document.getElementById('hiringManagerName').value,
+                    title: document.getElementById('title').value,
+                    companyName: document.getElementById('companyName').value,
+                    addressLine1: document.getElementById('recipientAddressLine1').value,
+                    addressLine2: document.getElementById('recipientAddressLine2').value,
+                    city: document.getElementById('recipientCity').value,
+                    state: document.getElementById('recipientState').value,
+                    postalCode: document.getElementById('recipientPostalCode').value,
+                    country: document.getElementById('recipientCountry').value
+                },
+                subject: {
+                    subject: document.getElementById('subject').value
+                },
+                greeting: {
+                    greeting: document.getElementById('greeting').value
+                },
+                opening: {
+                    paragraph: document.getElementById('openingParagraph').value
+                },
+                letterBody: {
+                    paragraphs: collectArrayData('paragraphs'),
+                    keySkills: collectArrayData('keySkills')
+                },
+                gapExplanation: {
+                    hasGap: document.getElementById('hasGap').checked,
+                    gapExplanation: document.getElementById('gapExplanation').value,
+                    gapPeriod: document.getElementById('gapPeriod').value,
+                    gapReason: document.getElementById('gapReason').value
+                },
+                callToAction: {
+                    paragraph: document.getElementById('callToActionParagraph').value
+                },
+                closing: {
+                    closing: document.getElementById('closing').value
+                },
+                signature: {
+                    name: document.getElementById('signatureName').value,
+                    typedName: document.getElementById('typedName').checked,
+                    includeContactBelow: document.getElementById('includeContactBelow').checked
+                },
+                availability: {
+                    includeAvailability: document.getElementById('includeAvailability').checked,
+                    startDate: document.getElementById('startDate').value,
+                    noticePeriod: document.getElementById('noticePeriod').value,
+                    preferredStartDate: document.getElementById('preferredStartDate').value
+                },
+                confidentiality: {
+                    includeConfidentiality: document.getElementById('includeConfidentiality').checked,
+                    note: document.getElementById('confidentialityNote').value
+                },
+                relocation: {
+                    includeRelocation: document.getElementById('includeRelocation').checked,
+                    willingToRelocate: document.getElementById('willingToRelocate').checked,
+                    preferredLocations: collectArrayData('preferredLocations'),
+                    requiresSponsorship: document.getElementById('requiresSponsorship').checked
+                },
+                salaryRequirements: {
+                    includeSalary: document.getElementById('includeSalary').checked,
+                    minSalary: document.getElementById('minSalary').value,
+                    maxSalary: document.getElementById('maxSalary').value,
+                    currency: document.getElementById('currency').value,
+                    negotiable: document.getElementById('negotiable').checked
+                },
+                language: document.getElementById('language').value,
+                tone: document.getElementById('tone').value,
+                templateId: document.getElementById('templateId').value,
+                theme: {
+                    colors: {
+                        '--primary-color': document.getElementById('primaryColor').value,
+                        '--background-color': document.getElementById('backgroundColor').value,
+                        '--text-color': document.getElementById('textColor').value,
+                        '--heading-color': document.getElementById('headingColor').value,
+                        '--accent-color': document.getElementById('accentColor').value,
+                        '--border-color': document.getElementById('borderColor').value
+                    }
+                }
+            };
+
+            return data;
+        }
+
+        function collectArrayData(sectionName) {
+            const container = document.getElementById(`${sectionName}Container`);
+            const items = [];
+
+            for (let i = 0; i < container.children.length; i++) {
+                const inputs = container.children[i].querySelectorAll('.item-field');
+
+                inputs.forEach(input => {
+                    const field = input.getAttribute('data-field');
+                    if (sectionName === 'paragraphs' && field === 'text') {
+                        items.push(input.value);
+                    } else if (sectionName === 'keySkills' && field === 'skill') {
+                        items.push(input.value);
+                    } else if (sectionName === 'preferredLocations' && field === 'location') {
+                        items.push(input.value);
+                    }
+                });
+            }
+
+            return items;
+        }
+
+        window.onload = function () {
+            loadIndexData();
+            setupLivePreview();
+        };
+
+        window.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "TEMPLATE_READY") {
+                updateCoverLetter();
+            }
+        });
+
+        function setupLivePreview() {
+            const formElements = document.querySelectorAll('input, textarea, select');
+            formElements.forEach(element => {
+                element.addEventListener('input', debounce(() => updateCoverLetter(), 500));
+                element.addEventListener('change', debounce(() => updateCoverLetter(), 500));
+            });
+
+            const addButtons = document.querySelectorAll('.add-item');
+            addButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    setTimeout(() => updateCoverLetter(), 100);
+                });
+            });
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function updateCoverLetter() {
+            const data = collectFormData();
+            const previewFrame = document.getElementById('previewFrame');
+
+            // Send data with multiple message types for compatibility
+            previewFrame.contentWindow.postMessage({
+                type: "COVERLETTER_DATA",
+                payload: data
+            }, "*");
+
+            previewFrame.contentWindow.postMessage({
+                type: "RENDER_DATA",
+                payload: data
+            }, "*");
+
+            // Send theme change separately for instant color updates
+            if (data.theme) {
+                previewFrame.contentWindow.postMessage({
+                    type: "CHANGE_THEME",
+                    payload: data.theme
+                }, "*");
+            }
+        }
+
+        function loadLocalFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const url = URL.createObjectURL(file);
+                const frame = document.getElementById('previewFrame');
+                frame.src = url;
+            }
+        }
+    </script>
+</body>
+
+</html>
