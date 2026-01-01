@@ -1204,21 +1204,7 @@
             }
         };
 
-        // Load data from index.json
-        async function loadIndexData() {
-            try {
-                const response = await fetch('index.json');
-                if (response.ok) {
-                    const data = await response.json();
-                    Object.assign(sampleData, data);
-                    initializeForm();
-                }
-            } catch (error) {
-                console.log('No index.json found or error loading it, using empty data');
-                initializeForm();
-            }
-        }
-
+        // Initialize the form (matching resume-tester.html pattern)
         function initializeForm() {
             // Name and Contact
             document.getElementById('fullName').value = sampleData.nameAndContact?.fullName || '';
@@ -1556,7 +1542,8 @@
         }
 
         window.onload = function () {
-            loadIndexData();
+            initializeForm();
+            // Add live preview functionality
             setupLivePreview();
         };
 
